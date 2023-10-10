@@ -12,7 +12,7 @@ import torch.nn as nn
 # hyper parameters
 path_model = "./checkpoint/"
 batch_size = 512
-epochs = 0
+epochs = 50
 transform = torchvision.transforms.Compose([torchvision.transforms.ToTensor()])
 
 # download mnist dataset
@@ -29,11 +29,11 @@ data_test = dataloader(dataset=data_test,batch_size=batch_size,shuffle=True)
 examples = enumerate(data_test)
 batch_idx, (example_data, example_targets) = next(examples)
 print(35, example_targets)
-print(36, example_data.shape)
+print(36, example_data)
 
 fig = plt.figure()
-for i in range(6):
-  plt.subplot(2,3,i+1)
+for i in range(36):
+  plt.subplot(6,6,i+1)
   plt.tight_layout()
   plt.imshow(example_data[i][0], cmap='gray', interpolation='none')
   plt.title("Ground Truth: {}".format(example_targets[i]))
@@ -41,11 +41,11 @@ for i in range(6):
   plt.yticks([])
 plt.show()
 """
+
 def test():
     net.eval()  # 切换到测试模式
     test_correct_num = 0
-    with torch.no_grad():   # 不更新参数
-
+    with torch.no_grad():   # 不更新参数s
         for batch_idx,(data,target) in enumerate(data_test):
             data = data.to(device)
             target = target.to(device)
@@ -63,7 +63,6 @@ def train():
         target = target.to(device)
         # forward之后得到预测值
         output = net(data)
-        print(66, output, target)
         # 计算loss
         loss = cost_fun(output, target)
         # backward
@@ -75,7 +74,7 @@ def train():
         _, pred = torch.max(output.data, 1)
         correct_num = torch.sum(pred == target).item()
         train_acc.append(correct_num / batch_size)
-        print(79, "Train Epoch:{}[{}/{} ({:.0f}%)]\t Loss:{:.6f} acc:{:.2f}".format(epoch, batch_idx * batch_size,
+        print("Train Epoch:{}[{}/{} ({:.0f}%)]\t Loss:{:.6f} acc:{:.2f}".format(epoch, batch_idx * batch_size,
                len(data_train.dataset),100. * batch_size * batch_idx / len(data_train.dataset), loss.item(),correct_num / batch_size))
 
 def save_state():
@@ -130,8 +129,6 @@ if __name__ == '__main__':
 
     # train
     for epoch in range(epochs):
-
-        # train
         train_loss = []
         train_acc = []
         # train
