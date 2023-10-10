@@ -45,7 +45,7 @@ plt.show()
 def test():
     net.eval()  # 切换到测试模式
     test_correct_num = 0
-    with torch.no_grad():   # 不更新参数s
+    with torch.no_grad():   # 不更新参数
         for batch_idx,(data,target) in enumerate(data_test):
             data = data.to(device)
             target = target.to(device)
@@ -121,7 +121,6 @@ if __name__ == '__main__':
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'mps')
     net = LeNet()  # 实例化网络
     data_input = Variable(torch.randn(16,1,28,28))
-    print(148, data_input.size(), net(data_input))
     net.to(device) # 将参数送入GPU中
     cost_fun = nn.CrossEntropyLoss()
     # optim
